@@ -1,0 +1,32 @@
+{
+  "name": "sumapp",
+  "version": "1.0.0",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run --filter '**' dev",
+    "commit": "sui-mono commit"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@s-ui/mono": "^2.45.0",
+    "@types/bun": "latest",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.4.0",
+    "prettier": "^3.8.1",
+    "sumapp-backend": "workspace:*",
+    "sumapp-frontend": "workspace:*",
+    "typescript-eslint": "^8.58.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  }
+}
