@@ -5,7 +5,10 @@ import ModeToggle from '@modules/molecules/ModeToggle'
 import HamburgerMenu from '@modules/molecules/HamburgerMenu'
 
 const Header = () => {
-  const items: NavigationItem[] = [{ key: 1, label: 'Inicio', path: '/' }]
+  const items: NavigationItem[] = [
+    { key: 1, label: 'Inicio', path: '/' },
+    { key: 2, label: 'Agregar lista', path: '/agregar-lista' },
+  ]
 
   return (
     <header className="fixed top-0 left-0 w-full py-3">
