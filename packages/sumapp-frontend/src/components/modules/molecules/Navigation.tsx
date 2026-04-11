@@ -19,11 +19,13 @@ type NavigationProps = {
 const Navigation = ({ items }: NavigationProps) => {
   return (
     <NavigationMenu className="hidden md:flex">
-      <NavigationMenuList>
+      <NavigationMenuList className="gap-2">
         {items.map((item) => (
           <NavigationMenuItem key={item.key}>
             <NavigationMenuLink asChild>
-              <NavLink to={item.path}>{item.label}</NavLink>
+              <NavLink to={item.path} viewTransition>
+                {item.label}
+              </NavLink>
             </NavigationMenuLink>
           </NavigationMenuItem>
         ))}

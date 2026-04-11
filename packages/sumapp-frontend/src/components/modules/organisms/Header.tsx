@@ -7,7 +7,8 @@ import HamburgerMenu from '@modules/molecules/HamburgerMenu'
 const Header = () => {
   const items: NavigationItem[] = [
     { key: 1, label: 'Inicio', path: '/' },
-    { key: 2, label: 'Agregar lista', path: '/agregar-lista' },
+    { key: 2, label: 'Listas', path: '/listas' },
+    { key: 3, label: 'Agregar lista', path: '/agregar-lista' },
   ]
 
   return (

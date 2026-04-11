@@ -11,7 +11,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Header />
-      <main className="min-h-[calc(100dvh-120px)] mt-15 flex flex-col">
+      <main className="min-h-[calc(100dvh-120px)] mt-15 py-8 flex flex-col">
         {children}
       </main>
       <Footer />

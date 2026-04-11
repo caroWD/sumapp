@@ -1,8 +1,10 @@
-import { useState, type CSSProperties } from 'react'
+import { useState } from 'react'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { v4 as uuidv4 } from 'uuid'
+import { useNavigate } from 'react-router'
 
 import {
   Field,
@@ -29,6 +31,10 @@ import {
   InputGroupInput,
 } from '@shadcn/input-group'
 import { Popover, PopoverContent, PopoverTrigger } from '@shadcn/popover'
+import useCurrentList from '@/components/hooks/useCurrentList'
+import SupermarketList from '@/lib/models/SupermarketList'
+import useSupermarketLists from '@/components/hooks/useSupermarketLists'
+import { formatDate } from '@/lib/utils'
 
 type SupermarketOption = {
   key: number
@@ -44,16 +50,6 @@ const supermarketOptions: SupermarketOption[] = [
   { key: 5, label: 'Boom', value: 'boom' },
 ] as const
 
-const formatDate = (date: Date | undefined) => {
-  if (!date) return ''
-
-  return date.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
-}
-
 const isValidDate = (date: Date | undefined) => {
   if (!date) return false
 
@@ -61,11 +57,16 @@ const isValidDate = (date: Date | undefined) => {
 }
 
 const supermarketListFormSchema = z.object({
-  supermarket: z.string().min(1, 'Please select your supermarket option.'),
-  'purchase-date': z.iso.date(),
+  supermarket: z.string().min(1, 'Selecciona tu supermercado.'),
+  'purchase-date': z.date().max(new Date(), { error: 'Fecha del futoro.' }),
 })
 
 const SupermarketListForm = () => {
+  const { currentList, setCurrentList } = useCurrentList()
+  const { supermarketLists, setSupermarketLists } = useSupermarketLists()
+
+  const navigate = useNavigate()
+
   const [open, setOpen] = useState<boolean>(false)
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [month, setMonth] = useState<Date | undefined>(date)
@@ -75,26 +76,59 @@ const SupermarketListForm = () => {
     resolver: zodResolver(supermarketListFormSchema),
     defaultValues: {
       supermarket: '',
-      'purchase-date': value,
+      'purchase-date': date,
     },
   })
 
-  const onSubmit = (data: z.infer<typeof supermarketListFormSchema>) => {
-    toast('You submitted the following values:', {
-      description: (
-        <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: 'bottom-right',
-      classNames: {
-        content: 'flex flex-col gap-2',
-      },
-      style: {
-        '--border-radius': 'calc(var(--radius)  + 4px)',
-      } as CSSProperties,
-    })
+  const onSubmit = async (data: z.infer<typeof supermarketListFormSchema>) => {
+    try {
+      if (!currentList.length)
+        throw new Error(
+          '!Lista de supermercado invalida! La lista de supermercado debe tener al menos un producto.'
+        )
+
+      const supermarkerList: SupermarketList = new SupermarketList(
+        uuidv4(),
+        data.supermarket,
+        new Date(data['purchase-date']),
+        currentList
+      )
+
+      const newSupermarketLists: SupermarketList[] = [
+        ...supermarketLists,
+        supermarkerList,
+      ]
+
+      setSupermarketLists(newSupermarketLists)
+
+      toast('Lista de supermercado agregada correctamente:', {
+        description:
+          'Se agrego la lista de supermercado correctamente en la base de datos.',
+        position: 'top-center',
+      })
+
+      setTimeout(() => {
+        navigate('/listas', { viewTransition: true })
+
+        setCurrentList([])
+      }, 2000)
+    } catch (error) {
+      if (error instanceof Error) {
+        toast(`Error (${error.name}): `, {
+          description: error.message,
+          position: 'top-center',
+        })
+
+        return
+      }
+
+      toast('Error desconocido', {
+        description: 'Comonuquese con el administrador para mayor información.',
+        position: 'top-center',
+      })
+    }
   }
+
   return (
     <form id="form-supermarket-list" onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
@@ -153,11 +187,11 @@ const SupermarketListForm = () => {
                   <InputGroupInput
                     name={field.name}
                     id="form-supermarket-list-purchase-date"
-                    value={value}
+                    value={formatDate(field.value)}
                     placeholder={value}
                     onChange={(e) => {
                       const date = new Date(e.target.value)
-                      setValue(e.target.value)
+                      setValue(formatDate(date))
                       if (isValidDate(date)) {
                         setDate(date)
                         setMonth(date)
@@ -198,6 +232,7 @@ const SupermarketListForm = () => {
                             setDate(date)
                             setValue(formatDate(date))
                             setOpen(false)
+                            field.onChange(date)
                           }}
                         />
                       </PopoverContent>
