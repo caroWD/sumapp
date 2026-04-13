@@ -1,5 +1,6 @@
 {
   "name": "sumapp-frontend",
+  "homepage": "https://carowd.github.io/sumapp",
   "private": true,
   "version": "1.0.0",
   "type": "module",

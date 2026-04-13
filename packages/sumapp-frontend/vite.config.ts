@@ -14,4 +14,5 @@ export default defineConfig({
       '@modules': resolve(__dirname, './src/components/modules'),
     },
   },
+  base: './',
 })
