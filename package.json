@@ -6,6 +6,10 @@
   "private": true,
   "scripts": {
     "dev": "bun run --filter '**' dev",
+    "appDev": "bun run --filter 'sumapp-frontend' dev",
+    "serverDev": "bun run --filter 'sumapp-backend' dev",
+    "appBuild": "bun run --filter 'sumapp-frontend' build",
+    "deploy": "gh-pages -d ./packages/sumapp-frontend/dist",
     "commit": "sui-mono commit"
   },
   "workspaces": [
@@ -15,8 +19,10 @@
     "@eslint/js": "^10.0.1",
     "@s-ui/mono": "^2.45.0",
     "@types/bun": "latest",
+    "@types/gh-pages": "^6.1.0",
     "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
+    "gh-pages": "^6.3.0",
     "globals": "^17.4.0",
     "prettier": "^3.8.1",
     "sumapp-backend": "workspace:*",

@@ -5,13 +5,11 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
       "@shadcn/*": ["./src/components/ui/*"],
       "@modules/*": ["./src/components/modules/*"]
-    },
-    "ignoreDeprecations": "6.0"
+    }
   }
 }

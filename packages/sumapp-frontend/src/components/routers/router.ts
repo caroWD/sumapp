@@ -1,9 +1,9 @@
-import { createBrowserRouter } from 'react-router'
+import { createHashRouter } from 'react-router'
 import Home from '@modules/pages/Home'
 import AddList from '@modules/pages/AddList'
 import Lists from '@modules/pages/Lists'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     children: [
