@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@shadcn/table'
+import ProductEditDialog from './ProductEditDialog'
 import useCurrentList from '@/components/hooks/useCurrentList'
 import type Product from '@/lib/models/Product'
 import { formatMoney } from '@/lib/utils'
@@ -54,17 +55,22 @@ const ProductListTable = () => {
             <TableCell className="text-right pr-6">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="size-8">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-8 cursor-pointer"
+                  >
                     <MoreHorizontal />
                     <span className="sr-only">Abrir menú</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Editar</DropdownMenuItem>
+                  <ProductEditDialog product={p} />
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     variant="destructive"
                     onClick={() => removeProduct(p.id)}
+                    className="cursor-pointer"
                   >
                     Eliminar
                   </DropdownMenuItem>
